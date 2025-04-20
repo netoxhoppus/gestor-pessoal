@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Background Circle -->
+    <path
+        android:fillColor="#E0E0E0"
+        android:pathData="M12,12m-10,0a10,10 0,1 1,20 0a10,10 0,1 1,-20 0"/>
+
+    <!-- Graduation Cap -->
+    <path
+        android:fillColor="#3F51B5"
+        android:pathData="M7,10l5,-3l5,3l-5,3z"/>
+    <path
+        android:fillColor="#3F51B5"
+        android:pathData="M7,10v4l5,3l5,-3v-4l-5,3z"/>
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M12,13m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"/>
+
+    <!-- Coins -->
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M8,14m-2,0a2,2 0,1 1,4 0a2,2 0,1 1,-4 0"/>
+    <path
+        android:fillColor="#FFC107"
+        android:pathData="M6,16m-1.5,0a1.5,1.5 0,1 1,3 0a1.5,1.5 0,1 1,-3 0"/>
+
+    <!-- Graph -->
+    <path
+        android:strokeColor="#3F51B5"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M14,8L16,8L18,6L20,8"/>
+
+    <!-- Book -->
+    <path
+        android:fillColor="#3F51B5"
+        android:pathData="M14,16h4v-4h-4z"/>
+    <path
+        android:strokeColor="#3F51B5"
+        android:strokeWidth="0.5"
+        android:pathData="M14,14h4"/>
+</vector> 

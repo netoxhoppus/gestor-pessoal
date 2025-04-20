@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_disciplinas"
+        android:icon="@drawable/ic_college"
+        android:title="@string/disciplinas" />
+    
+    <item
+        android:id="@+id/nav_horarios"
+        android:icon="@drawable/ic_schedule"
+        android:title="@string/horarios" />
+    
+    <item
+        android:id="@+id/nav_entregas"
+        android:icon="@drawable/ic_assignment"
+        android:title="@string/entregas" />
+    
+    <item
+        android:id="@+id/nav_notas"
+        android:icon="@drawable/ic_grade"
+        android:title="@string/notas" />
+</menu> 

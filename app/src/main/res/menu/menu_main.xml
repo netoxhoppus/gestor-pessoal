@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_inicio"
+        android:icon="@drawable/ic_home"
+        android:title="Início"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_financas"
+        android:icon="@drawable/ic_money"
+        android:title="Finanças"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_faculdade"
+        android:icon="@drawable/ic_academic_finance"
+        android:title="Faculdade"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_logout"
+        android:icon="@drawable/ic_logout"
+        android:title="Sair"
+        app:showAsAction="ifRoom"/>
+
+</menu> 

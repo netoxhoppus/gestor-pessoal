@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gestor pessoal</string>
+    <string name="greeting_message">Olá, %1$s!</string>
+    <string name="title_activity_gasto">Gastos</string>
+    <string name="title_activity_categoria">Categorias</string>
+    <string name="title_activity_adicionar_categoria">Nova Categoria</string>
+    <string name="editar_categoria">Editar categoria</string>
+    <string name="excluir_categoria">Excluir categoria</string>
+    <string name="nenhum_gasto">Nenhum gasto cadastrado</string>
+    <string name="adicionar_gasto">Adicionar gasto</string>
+    <string name="editar_gasto">Editar gasto</string>
+    <string name="excluir_gasto">Excluir gasto</string>
+    <string name="hint_descricao">Descrição</string>
+    <string name="hint_valor">Valor</string>
+    <string name="hint_data">Data</string>
+    <string name="hint_categoria">Categoria</string>
+    <string name="btn_salvar">Salvar</string>
+    <string name="title_adicionar_editar_gasto">Adicionar/Editar Gasto</string>
+    <string name="gastos_futuros">Gastos Futuros</string>
+    <string name="adicionar_gasto_futuro">Adicionar Gasto Futuro</string>
+    <string name="nenhum_gasto_futuro">Nenhum gasto futuro cadastrado</string>
+    <string name="status_pendente">Pendente</string>
+    <string name="status_pago">Pago</string>
+    <string name="status_vencido">Vencido</string>
+    <string name="recorrencia_mensal">Mensal</string>
+    <string name="recorrencia_anual">Anual</string>
+    <string name="vence_em">Vence em %1$s</string>
+    <string name="vencido_em">Vencido em %1$s</string>
+    <string name="hint_data_vencimento">Data de Vencimento</string>
+    <string name="gasto_recorrente">Gasto Recorrente</string>
+    <string name="erro_carregar_gasto_futuro">Erro ao carregar gasto futuro</string>
+    <string name="gasto_futuro_nao_encontrado">Gasto futuro não encontrado</string>
+    <string-array name="periodos_recorrencia">
+        <item>Mensal</item>
+        <item>Anual</item>
+    </string-array>
+    
+    <!-- Strings para gestão acadêmica -->
+    <string name="faculdade">Faculdade</string>
+    <string name="disciplinas">Disciplinas</string>
+    <string name="horarios">Horários</string>
+    <string name="entregas">Entregas</string>
+    <string name="provas">Provas</string>
+    <string name="notas">Notas</string>
+    <string name="frequencia">Frequência</string>
+    <string name="calendario_academico">Calendário Acadêmico</string>
+    <string name="professores">Professores</string>
+    <string name="materiais">Materiais de Estudo</string>
+    <string name="nenhuma_disciplina">Nenhuma disciplina cadastrada</string>
+    <string name="adicionar_disciplina">Adicionar Disciplina</string>
+    <string name="editar_disciplina">Editar Disciplina</string>
+    <string name="excluir_disciplina">Excluir Disciplina</string>
+    <string name="hint_nome_disciplina">Nome da Disciplina</string>
+    <string name="hint_professor">Professor</string>
+    <string name="hint_periodo">Período</string>
+    <string name="hint_sala">Sala</string>
+    <string name="hint_horario">Horário</string>
+    <string name="hint_media">Média</string>
+    <string name="disciplina_salva">Disciplina salva com sucesso</string>
+    <string name="erro_salvar_disciplina">Erro ao salvar disciplina</string>
+    <string name="confirmar_exclusao_disciplina">Deseja excluir esta disciplina?</string>
+    <string name="media_format">Média: %.2f</string>
+    
+    <!-- Strings para notas -->
+    <string name="nenhuma_nota">Nenhuma nota cadastrada</string>
+    <string name="adicionar_nota">Adicionar nota</string>
+    <string name="editar_nota">Editar nota</string>
+    <string name="excluir_nota">Excluir nota</string>
+    <string name="nota_salva">Nota salva com sucesso</string>
+    <string name="erro_salvar_nota">Erro ao salvar nota</string>
+    <string name="confirmar_exclusao_nota">Deseja excluir esta nota?</string>
+    <string name="campo_obrigatorio">Campo obrigatório</string>
+    <string name="excluir_gasto_futuro">Excluir gasto futuro</string>
+    <string name="confirmar_exclusao_gasto_futuro">Deseja excluir este gasto futuro?</string>
+    <string name="nenhum_horario">Nenhum horário cadastrado</string>
+    <string name="adicionar_horario">Adicionar horário</string>
+    <string name="editar_horario">Editar horário</string>
+    <string name="excluir_horario">Excluir horário</string>
+    <string name="confirmar_exclusao_horario">Deseja excluir este horário?</string>
+    <string name="horario_salvo">Horário salvo com sucesso</string>
+    <string name="erro_salvar_horario">Erro ao salvar horário</string>
+    <string name="hint_dia_semana">Dia da semana</string>
+    <string name="hint_hora_inicio">Hora de início</string>
+    <string name="hint_hora_fim">Hora de fim</string>
+</resources>
