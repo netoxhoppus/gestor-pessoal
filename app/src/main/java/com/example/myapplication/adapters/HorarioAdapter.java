@@ -71,10 +71,12 @@ public class HorarioAdapter extends RecyclerView.Adapter<HorarioAdapter.ViewHold
         }
 
         public void bind(final Horario horario) {
-            textViewDiaSemana.setText(horario.getDiaSemana());
-            textViewHorario.setText(String.format("%s - %s", horario.getHoraInicio(), horario.getHoraFim()));
-            textViewDisciplina.setText(horario.getDisciplinaNome());
-            textViewSala.setText(horario.getObservacoes());
+            textViewDiaSemana.setText(horario.getDiaSemana() != null ? horario.getDiaSemana() : "");
+            textViewHorario.setText(String.format("%s - %s", 
+                horario.getHoraInicio() != null ? horario.getHoraInicio() : "",
+                horario.getHoraFim() != null ? horario.getHoraFim() : ""));
+            textViewDisciplina.setText(horario.getDisciplinaNome() != null ? horario.getDisciplinaNome() : "Disciplina não definida");
+            textViewSala.setText(horario.getObservacoes() != null ? horario.getObservacoes() : "");
 
             itemView.setOnClickListener(v -> {
                 if (listener != null) {

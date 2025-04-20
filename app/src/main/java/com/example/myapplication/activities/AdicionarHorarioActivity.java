@@ -1,151 +1,180 @@
 package com.example.myapplication.activities;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.example.myapplication.dao.DisciplinaDAO;
 import com.example.myapplication.dao.HorarioDAO;
+import com.example.myapplication.helpers.SQLiteHelper;
 import com.example.myapplication.models.Disciplina;
 import com.example.myapplication.models.Horario;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class AdicionarHorarioActivity extends AppCompatActivity {
 
-    private TextInputEditText edtDiaSemana;
-    private TextInputEditText edtHoraInicio;
-    private TextInputEditText edtHoraFim;
-    private TextInputEditText edtObservacoes;
-    private AutoCompleteTextView actvDisciplina;
-    private Button btnSalvar;
+    private MaterialToolbar toolbar;
+    private AutoCompleteTextView autoCompleteTextViewDiaSemana;
+    private TextInputEditText editTextHoraInicio;
+    private TextInputEditText editTextHoraFim;
+    private AutoCompleteTextView autoCompleteTextViewDisciplina;
+    private TextInputEditText editTextSala;
+    private MaterialButton buttonSalvar;
 
     private HorarioDAO horarioDAO;
     private DisciplinaDAO disciplinaDAO;
-    private List<Disciplina> disciplinas;
-    private Horario horarioParaEditar;
+    private Horario horario;
+    private boolean isEditMode = false;
+    private final Calendar calendar = Calendar.getInstance();
+    private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adicionar_horario);
 
-        // Configurar a ActionBar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(getString(R.string.adicionar_horario));
-        }
-
-        // Inicializar DAOs
+        // Inicializa os DAOs
         horarioDAO = new HorarioDAO(this);
         disciplinaDAO = new DisciplinaDAO(this);
 
-        // Inicializar views
-        edtDiaSemana = findViewById(R.id.edtDiaSemana);
-        edtHoraInicio = findViewById(R.id.edtHoraInicio);
-        edtHoraFim = findViewById(R.id.edtHoraFim);
-        edtObservacoes = findViewById(R.id.edtObservacoes);
-        actvDisciplina = findViewById(R.id.actvDisciplina);
-        btnSalvar = findViewById(R.id.btnSalvar);
+        // Inicializa as views
+        initializeViews();
+        setupToolbar();
+        setupDiaSemanaDropdown();
+        setupDisciplinaDropdown();
+        setupTimePickers();
+        setupSalvarButton();
 
-        // Carregar disciplinas para o AutoCompleteTextView
-        carregarDisciplinas();
-
-        // Verificar se é edição
-        horarioParaEditar = (Horario) getIntent().getSerializableExtra("horario");
-        if (horarioParaEditar != null) {
-            preencherCamposParaEdicao();
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setTitle(getString(R.string.editar_horario));
-            }
+        // Verifica se é modo de edição
+        if (getIntent().hasExtra("horario")) {
+            isEditMode = true;
+            horario = (Horario) getIntent().getSerializableExtra("horario");
+            preencherCampos();
         }
-
-        // Configurar botão salvar
-        btnSalvar.setOnClickListener(v -> salvarHorario());
     }
 
-    private void carregarDisciplinas() {
-        // TODO: Pegar usuário logado
-        long usuarioId = 1; // Temporário
-        disciplinas = disciplinaDAO.list(usuarioId);
-        ArrayAdapter<Disciplina> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_dropdown_item_1line, disciplinas);
-        actvDisciplina.setAdapter(adapter);
+    private void initializeViews() {
+        toolbar = findViewById(R.id.toolbar);
+        autoCompleteTextViewDiaSemana = findViewById(R.id.autoCompleteTextViewDiaSemana);
+        editTextHoraInicio = findViewById(R.id.editTextHoraInicio);
+        editTextHoraFim = findViewById(R.id.editTextHoraFim);
+        autoCompleteTextViewDisciplina = findViewById(R.id.autoCompleteTextViewDisciplina);
+        editTextSala = findViewById(R.id.editTextSala);
+        buttonSalvar = findViewById(R.id.buttonSalvar);
     }
 
-    private void preencherCamposParaEdicao() {
-        edtDiaSemana.setText(horarioParaEditar.getDiaSemana());
-        edtHoraInicio.setText(horarioParaEditar.getHoraInicio());
-        edtHoraFim.setText(horarioParaEditar.getHoraFim());
-        edtObservacoes.setText(horarioParaEditar.getObservacoes());
+    private void setupToolbar() {
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(isEditMode ? R.string.editar_horario : R.string.adicionar_horario);
+        }
+    }
 
-        // Encontrar e selecionar a disciplina correta
+    private void setupDiaSemanaDropdown() {
+        String[] diasSemana = getResources().getStringArray(R.array.dias_semana);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, diasSemana);
+        autoCompleteTextViewDiaSemana.setAdapter(adapter);
+    }
+
+    private void setupDisciplinaDropdown() {
+        List<Disciplina> disciplinas = disciplinaDAO.list(SQLiteHelper.getCurrentUserId());
+        List<String> nomesDisciplinas = new ArrayList<>();
         for (Disciplina disciplina : disciplinas) {
-            if (disciplina.getId() == horarioParaEditar.getIdAula()) {
-                actvDisciplina.setText(disciplina.getNome(), false);
-                break;
-            }
+            nomesDisciplinas.add(disciplina.getNome());
         }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, nomesDisciplinas);
+        autoCompleteTextViewDisciplina.setAdapter(adapter);
+    }
+
+    private void setupTimePickers() {
+        editTextHoraInicio.setOnClickListener(v -> showTimePickerDialog(editTextHoraInicio));
+        editTextHoraFim.setOnClickListener(v -> showTimePickerDialog(editTextHoraFim));
+    }
+
+    private void showTimePickerDialog(TextInputEditText editText) {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+            this,
+            (view, hourOfDay, minute) -> {
+                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                calendar.set(Calendar.MINUTE, minute);
+                editText.setText(timeFormat.format(calendar.getTime()));
+            },
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE),
+            true
+        );
+        timePickerDialog.show();
+    }
+
+    private void setupSalvarButton() {
+        buttonSalvar.setOnClickListener(v -> salvarHorario());
+    }
+
+    private void preencherCampos() {
+        autoCompleteTextViewDiaSemana.setText(horario.getDiaSemana());
+        editTextHoraInicio.setText(horario.getHoraInicio());
+        editTextHoraFim.setText(horario.getHoraFim());
+        autoCompleteTextViewDisciplina.setText(horario.getDisciplinaNome());
+        editTextSala.setText(horario.getObservacoes());
     }
 
     private void salvarHorario() {
-        if (!validarCampos()) return;
+        String diaSemana = autoCompleteTextViewDiaSemana.getText().toString();
+        String horaInicio = editTextHoraInicio.getText().toString();
+        String horaFim = editTextHoraFim.getText().toString();
+        String nomeDisciplina = autoCompleteTextViewDisciplina.getText().toString();
+        String sala = editTextSala.getText().toString();
 
-        String diaSemana = edtDiaSemana.getText().toString().trim();
-        String horaInicio = edtHoraInicio.getText().toString().trim();
-        String horaFim = edtHoraFim.getText().toString().trim();
-        String observacoes = edtObservacoes.getText().toString().trim();
-        String nomeDisciplina = actvDisciplina.getText().toString().trim();
+        if (diaSemana.isEmpty() || horaInicio.isEmpty() || horaFim.isEmpty() || nomeDisciplina.isEmpty()) {
+            Toast.makeText(this, R.string.erro_campos_obrigatorios, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // Encontrar o ID da disciplina selecionada
-        int idAula = -1;
+        if (horario == null) {
+            horario = new Horario();
+        }
+
+        horario.setDiaSemana(diaSemana);
+        horario.setHoraInicio(horaInicio);
+        horario.setHoraFim(horaFim);
+        horario.setObservacoes(sala);
+        horario.setDisciplinaNome(nomeDisciplina);
+
+        // Busca a disciplina pelo nome para obter o ID
+        List<Disciplina> disciplinas = disciplinaDAO.list(SQLiteHelper.getCurrentUserId());
         for (Disciplina disciplina : disciplinas) {
             if (disciplina.getNome().equals(nomeDisciplina)) {
-                idAula = disciplina.getId();
+                horario.setIdAula(disciplina.getId());
                 break;
             }
         }
 
-        if (idAula == -1) {
-            Toast.makeText(this, "Selecione uma disciplina válida", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // TODO: Pegar usuário logado
-        long usuarioId = 1; // Temporário
-
-        boolean sucesso;
-        if (horarioParaEditar == null) {
-            // Criar novo horário
-            Horario novoHorario = new Horario();
-            novoHorario.setDiaSemana(diaSemana);
-            novoHorario.setHoraInicio(horaInicio);
-            novoHorario.setHoraFim(horaFim);
-            novoHorario.setObservacoes(observacoes);
-            novoHorario.setIdAula(idAula);
-            novoHorario.setUsuarioId((int) usuarioId);
-
-            sucesso = horarioDAO.insert(novoHorario) > 0;
+        boolean success;
+        if (isEditMode) {
+            success = horarioDAO.update(horario);
         } else {
-            // Atualizar horário existente
-            horarioParaEditar.setDiaSemana(diaSemana);
-            horarioParaEditar.setHoraInicio(horaInicio);
-            horarioParaEditar.setHoraFim(horaFim);
-            horarioParaEditar.setObservacoes(observacoes);
-            horarioParaEditar.setIdAula(idAula);
-
-            sucesso = horarioDAO.update(horarioParaEditar);
+            success = horarioDAO.insert(horario) > 0;
         }
 
-        if (sucesso) {
+        if (success) {
             Toast.makeText(this, R.string.horario_salvo, Toast.LENGTH_SHORT).show();
             finish();
         } else {
@@ -153,30 +182,10 @@ public class AdicionarHorarioActivity extends AppCompatActivity {
         }
     }
 
-    private boolean validarCampos() {
-        if (edtDiaSemana.getText().toString().trim().isEmpty()) {
-            edtDiaSemana.setError(getString(R.string.campo_obrigatorio));
-            return false;
-        }
-        if (edtHoraInicio.getText().toString().trim().isEmpty()) {
-            edtHoraInicio.setError(getString(R.string.campo_obrigatorio));
-            return false;
-        }
-        if (edtHoraFim.getText().toString().trim().isEmpty()) {
-            edtHoraFim.setError(getString(R.string.campo_obrigatorio));
-            return false;
-        }
-        if (actvDisciplina.getText().toString().trim().isEmpty()) {
-            actvDisciplina.setError(getString(R.string.campo_obrigatorio));
-            return false;
-        }
-        return true;
-    }
-
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

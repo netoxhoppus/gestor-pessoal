@@ -9,6 +9,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String TAG = "SQLiteHelper";
     private static final String DATABASE_NAME = "gestor_pessoal.db";
     private static final int DATABASE_VERSION = 6;  // Incrementado para recriar a tabela entregas
+    private static int currentUserId = 1; // Default user ID
 
     // Tabela de usuários
     public static final String TABLE_USUARIOS = "usuarios";
@@ -121,7 +122,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             COLUMN_HORA_INICIO + " TEXT NOT NULL, " +
             COLUMN_HORA_FIM + " TEXT NOT NULL, " +
             COLUMN_OBSERVACOES + " TEXT, " +
-            COLUMN_ID_AULA + " INTEGER NOT NULL, " +
+            COLUMN_ID_AULA + " INTEGER, " +
             COLUMN_USUARIO_ID + " INTEGER NOT NULL, " +
             "FOREIGN KEY(" + COLUMN_ID_AULA + ") REFERENCES " + 
             TABLE_DISCIPLINAS + "(" + COLUMN_ID + "), " +
@@ -212,5 +213,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         } catch (Exception e) {
             Log.e(TAG, "Erro ao atualizar banco de dados", e);
         }
+    }
+
+    public static int getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public static void setCurrentUserId(int userId) {
+        currentUserId = userId;
     }
 } 

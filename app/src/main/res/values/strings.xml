@@ -83,4 +83,7 @@
     <string name="hint_dia_semana">Dia da semana</string>
     <string name="hint_hora_inicio">Hora de início</string>
     <string name="hint_hora_fim">Hora de fim</string>
+    <string name="disciplina">Disciplina</string>
+    <string name="sala">Sala</string>
+    <string name="erro_campos_obrigatorios">Preencha todos os campos obrigatórios</string>
 </resources>

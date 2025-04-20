@@ -18,11 +18,9 @@ import java.util.Locale;
 public class EntregaAdapter extends RecyclerView.Adapter<EntregaAdapter.ViewHolder> {
 
     private final List<Entrega> entregas;
-    private final SimpleDateFormat dateFormat;
 
     public EntregaAdapter(List<Entrega> entregas) {
         this.entregas = entregas;
-        this.dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     }
 
     @NonNull
@@ -59,11 +57,17 @@ public class EntregaAdapter extends RecyclerView.Adapter<EntregaAdapter.ViewHold
         }
 
         public void bind(Entrega entrega) {
-            textViewTitulo.setText(entrega.getTitulo());
-            textViewDescricao.setText(entrega.getDescricao());
-            textViewDisciplina.setText(entrega.getDisciplinaNome());
-            textViewData.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                    .format(entrega.getDataEntrega()));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            
+            textViewTitulo.setText(entrega.getTitulo() != null ? entrega.getTitulo() : "");
+            textViewDescricao.setText(entrega.getDescricao() != null ? entrega.getDescricao() : "");
+            textViewDisciplina.setText(entrega.getDisciplinaNome() != null ? entrega.getDisciplinaNome() : "Disciplina não definida");
+            
+            if (entrega.getDataEntrega() != null) {
+                textViewData.setText(dateFormat.format(entrega.getDataEntrega()));
+            } else {
+                textViewData.setText("");
+            }
         }
     }
 } 

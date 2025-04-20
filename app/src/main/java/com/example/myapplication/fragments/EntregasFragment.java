@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -52,13 +53,18 @@ public class EntregasFragment extends Fragment {
     }
 
     private void carregarEntregas() {
-        // TODO: Pegar usuário logado
-        long usuarioId = 1; // Temporário
-        entregas.clear();
-        entregas.addAll(entregaDAO.list(usuarioId));
-        adapter.notifyDataSetChanged();
-        
-        updateEmptyView();
+        try {
+            // TODO: Pegar usuário logado
+            long usuarioId = 1; // Temporário
+            entregas.clear();
+            entregas.addAll(entregaDAO.list(usuarioId));
+            adapter.notifyDataSetChanged();
+            updateEmptyView();
+        } catch (Exception e) {
+            android.util.Log.e("EntregasFragment", "Erro ao carregar entregas", e);
+            Toast.makeText(requireContext(), "Erro ao carregar entregas", Toast.LENGTH_SHORT).show();
+            updateEmptyView();
+        }
     }
 
     private void updateEmptyView() {

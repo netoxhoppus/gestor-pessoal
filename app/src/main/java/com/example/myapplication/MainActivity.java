@@ -11,7 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
 import com.example.myapplication.activities.GastoActivity;
-import com.example.myapplication.activities.DisciplinaActivity;
+import com.example.myapplication.activities.FaculdadeActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         cardFaculdade.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, DisciplinaActivity.class);
+            Intent intent = new Intent(MainActivity.this, FaculdadeActivity.class);
             startActivity(intent);
         });
     }

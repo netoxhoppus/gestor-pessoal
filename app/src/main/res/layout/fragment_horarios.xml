@@ -12,7 +12,7 @@
         android:padding="8dp" />
 
     <TextView
-        android:id="@+id/textViewEmptyHorarios"
+        android:id="@+id/textViewEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -27,6 +27,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="@string/adicionar_horario"
-        android:src="@drawable/ic_add" />
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout> 

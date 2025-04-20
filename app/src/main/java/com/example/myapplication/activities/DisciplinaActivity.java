@@ -22,7 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DisciplinaActivity extends AppCompatActivity implements DisciplinaAdapter.OnItemClickListener {
+public class DisciplinaActivity extends AppCompatActivity implements DisciplinaAdapter.OnDisciplinaClickListener {
     private RecyclerView recyclerView;
     private TextView txtEmpty;
     private DisciplinaAdapter adapter;
@@ -63,7 +63,8 @@ public class DisciplinaActivity extends AppCompatActivity implements DisciplinaA
 
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new DisciplinaAdapter(new ArrayList<>(), this);
+        adapter = new DisciplinaAdapter(new ArrayList<>());
+        adapter.setOnDisciplinaClickListener(this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -75,7 +76,7 @@ public class DisciplinaActivity extends AppCompatActivity implements DisciplinaA
 
     private void loadDisciplinas() {
         List<Disciplina> disciplinas = disciplinaDAO.list(1L); // TODO: Get real user ID
-        adapter.updateList(disciplinas);
+        adapter.setDisciplinas(disciplinas);
         
         // Show/hide empty view
         if (disciplinas.isEmpty()) {
@@ -88,14 +89,14 @@ public class DisciplinaActivity extends AppCompatActivity implements DisciplinaA
     }
 
     @Override
-    public void onItemClick(Disciplina disciplina) {
+    public void onDisciplinaClick(Disciplina disciplina) {
         Intent intent = new Intent(this, AdicionarDisciplinaActivity.class);
         intent.putExtra("disciplina", disciplina);
         startActivity(intent);
     }
 
     @Override
-    public void onItemLongClick(Disciplina disciplina) {
+    public void onDisciplinaLongClick(Disciplina disciplina) {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.excluir_disciplina)
                 .setMessage(R.string.confirmar_exclusao_disciplina)

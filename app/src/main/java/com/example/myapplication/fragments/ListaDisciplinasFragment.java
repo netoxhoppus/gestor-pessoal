@@ -26,7 +26,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaDisciplinasFragment extends Fragment implements DisciplinaAdapter.OnItemClickListener {
+public class ListaDisciplinasFragment extends Fragment implements DisciplinaAdapter.OnDisciplinaClickListener {
 
     private RecyclerView recyclerView;
     private TextView textViewEmpty;
@@ -56,7 +56,8 @@ public class ListaDisciplinasFragment extends Fragment implements DisciplinaAdap
     }
 
     private void setupRecyclerView() {
-        adapter = new DisciplinaAdapter(disciplinas, this);
+        adapter = new DisciplinaAdapter(disciplinas);
+        adapter.setOnDisciplinaClickListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(adapter);
     }
@@ -82,12 +83,12 @@ public class ListaDisciplinasFragment extends Fragment implements DisciplinaAdap
     }
 
     @Override
-    public void onItemClick(Disciplina disciplina) {
+    public void onDisciplinaClick(Disciplina disciplina) {
         showAddEditDialog(disciplina);
     }
 
     @Override
-    public void onItemLongClick(Disciplina disciplina) {
+    public void onDisciplinaLongClick(Disciplina disciplina) {
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.excluir_disciplina)
                 .setMessage(R.string.confirmar_exclusao_disciplina)

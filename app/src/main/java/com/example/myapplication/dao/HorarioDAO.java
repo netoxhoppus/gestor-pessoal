@@ -21,7 +21,9 @@ public class HorarioDAO extends BaseDAO {
         values.put("hora_inicio", horario.getHoraInicio());
         values.put("hora_fim", horario.getHoraFim());
         values.put("observacoes", horario.getObservacoes());
-        values.put("id_aula", horario.getIdAula());
+        if (horario.getIdAula() > 0) {
+            values.put("id_aula", horario.getIdAula());
+        }
         values.put("usuario_id", horario.getUsuarioId());
 
         return getWritableDatabase().insert("horarios", null, values);
@@ -56,26 +58,44 @@ public class HorarioDAO extends BaseDAO {
 
         try {
             cursor = getReadableDatabase().rawQuery(
-                    "SELECT h.*, d.nome as disciplina_nome " +
+                    "SELECT h.*, COALESCE(d.nome, 'Disciplina não definida') as disciplina_nome " +
                     "FROM horarios h " +
-                    "INNER JOIN disciplinas d ON h.id_aula = d.id " +
+                    "LEFT JOIN disciplinas d ON h.id_aula = d.id " +
                     "WHERE h.usuario_id = ? " +
                     "ORDER BY h.dia_semana ASC, h.hora_inicio ASC",
                     new String[]{String.valueOf(usuarioId)});
 
             while (cursor.moveToNext()) {
-                Horario horario = new Horario();
-                horario.setIdHorario(cursor.getInt(cursor.getColumnIndexOrThrow("id_horario")));
-                horario.setDiaSemana(cursor.getString(cursor.getColumnIndexOrThrow("dia_semana")));
-                horario.setHoraInicio(cursor.getString(cursor.getColumnIndexOrThrow("hora_inicio")));
-                horario.setHoraFim(cursor.getString(cursor.getColumnIndexOrThrow("hora_fim")));
-                horario.setObservacoes(cursor.getString(cursor.getColumnIndexOrThrow("observacoes")));
-                horario.setIdAula(cursor.getInt(cursor.getColumnIndexOrThrow("id_aula")));
-                horario.setUsuarioId(cursor.getInt(cursor.getColumnIndexOrThrow("usuario_id")));
-                horario.setDisciplinaNome(cursor.getString(cursor.getColumnIndexOrThrow("disciplina_nome")));
-                
-                horarios.add(horario);
+                try {
+                    Horario horario = new Horario();
+                    horario.setIdHorario(cursor.getInt(cursor.getColumnIndexOrThrow("id_horario")));
+                    horario.setDiaSemana(cursor.getString(cursor.getColumnIndexOrThrow("dia_semana")));
+                    horario.setHoraInicio(cursor.getString(cursor.getColumnIndexOrThrow("hora_inicio")));
+                    horario.setHoraFim(cursor.getString(cursor.getColumnIndexOrThrow("hora_fim")));
+                    
+                    // Tratamento para observações nulas
+                    int observacoesIndex = cursor.getColumnIndex("observacoes");
+                    if (!cursor.isNull(observacoesIndex)) {
+                        horario.setObservacoes(cursor.getString(observacoesIndex));
+                    } else {
+                        horario.setObservacoes("");
+                    }
+                    
+                    horario.setIdAula(cursor.getInt(cursor.getColumnIndexOrThrow("id_aula")));
+                    horario.setUsuarioId(cursor.getInt(cursor.getColumnIndexOrThrow("usuario_id")));
+                    
+                    // Tratamento para nome da disciplina nulo
+                    String disciplinaNome = cursor.getString(cursor.getColumnIndexOrThrow("disciplina_nome"));
+                    horario.setDisciplinaNome(disciplinaNome != null ? disciplinaNome : "Disciplina não definida");
+                    
+                    horarios.add(horario);
+                } catch (Exception e) {
+                    android.util.Log.e("HorarioDAO", "Erro ao processar horário do cursor", e);
+                    continue;
+                }
             }
+        } catch (Exception e) {
+            android.util.Log.e("HorarioDAO", "Erro ao listar horários", e);
         } finally {
             if (cursor != null) {
                 cursor.close();

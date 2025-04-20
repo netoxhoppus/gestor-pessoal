@@ -11,20 +11,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.models.Disciplina;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.ViewHolder> {
 
     private List<Disciplina> disciplinas;
-    private OnItemClickListener listener;
+    private OnDisciplinaClickListener listener;
 
-    public interface OnItemClickListener {
-        void onItemClick(Disciplina disciplina);
-        void onItemLongClick(Disciplina disciplina);
+    public interface OnDisciplinaClickListener {
+        void onDisciplinaClick(Disciplina disciplina);
+        void onDisciplinaLongClick(Disciplina disciplina);
     }
 
-    public DisciplinaAdapter(List<Disciplina> disciplinas, OnItemClickListener listener) {
+    public DisciplinaAdapter(List<Disciplina> disciplinas) {
         this.disciplinas = disciplinas;
+    }
+
+    public void setDisciplinas(List<Disciplina> disciplinas) {
+        this.disciplinas = disciplinas;
+        notifyDataSetChanged();
+    }
+
+    public void setOnDisciplinaClickListener(OnDisciplinaClickListener listener) {
         this.listener = listener;
     }
 
@@ -39,7 +48,22 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Disciplina disciplina = disciplinas.get(position);
-        holder.bind(disciplina, listener);
+        holder.textViewNome.setText(disciplina.getNome());
+        holder.textViewProfessor.setText(disciplina.getProfessor());
+        holder.textViewNota.setText(disciplina.getPeriodo());
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onDisciplinaClick(disciplina);
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (listener != null) {
+                listener.onDisciplinaLongClick(disciplina);
+            }
+            return true;
+        });
     }
 
     @Override
@@ -47,33 +71,16 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Vi
         return disciplinas.size();
     }
 
-    public void updateList(List<Disciplina> newList) {
-        this.disciplinas = newList;
-        notifyDataSetChanged();
-    }
-
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewNomeDisciplina;
-        private TextView textViewProfessor;
-        private TextView textViewPeriodo;
+        TextView textViewNome;
+        TextView textViewProfessor;
+        TextView textViewNota;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-            textViewNomeDisciplina = itemView.findViewById(R.id.textViewNomeDisciplina);
+            textViewNome = itemView.findViewById(R.id.textViewNome);
             textViewProfessor = itemView.findViewById(R.id.textViewProfessor);
-            textViewPeriodo = itemView.findViewById(R.id.textViewPeriodo);
-        }
-
-        public void bind(final Disciplina disciplina, final OnItemClickListener listener) {
-            textViewNomeDisciplina.setText(disciplina.getNome());
-            textViewProfessor.setText(disciplina.getProfessor());
-            textViewPeriodo.setText(disciplina.getPeriodo());
-            
-            itemView.setOnClickListener(v -> listener.onItemClick(disciplina));
-            itemView.setOnLongClickListener(v -> {
-                listener.onItemLongClick(disciplina);
-                return true;
-            });
+            textViewNota = itemView.findViewById(R.id.textViewNota);
         }
     }
 } 

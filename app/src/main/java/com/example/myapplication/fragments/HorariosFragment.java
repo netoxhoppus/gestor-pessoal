@@ -40,7 +40,7 @@ public class HorariosFragment extends Fragment implements HorarioAdapter.OnHorar
         View view = inflater.inflate(R.layout.fragment_horarios, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerViewHorarios);
-        textViewEmptyHorarios = view.findViewById(R.id.textViewEmptyHorarios);
+        textViewEmptyHorarios = view.findViewById(R.id.textViewEmpty);
         fabAddHorario = view.findViewById(R.id.fabAddHorario);
 
         horarioDAO = new HorarioDAO(requireContext());
@@ -68,13 +68,18 @@ public class HorariosFragment extends Fragment implements HorarioAdapter.OnHorar
     }
 
     private void carregarHorarios() {
-        // TODO: Pegar usuário logado
-        long usuarioId = 1; // Temporário
-        horarios.clear();
-        horarios.addAll(horarioDAO.list(usuarioId));
-        adapter.setHorarios(horarios);
-        
-        updateEmptyView();
+        try {
+            // TODO: Pegar usuário logado
+            long usuarioId = 1; // Temporário
+            horarios.clear();
+            horarios.addAll(horarioDAO.list(usuarioId));
+            adapter.setHorarios(horarios);
+            updateEmptyView();
+        } catch (Exception e) {
+            android.util.Log.e("HorariosFragment", "Erro ao carregar horários", e);
+            Toast.makeText(requireContext(), "Erro ao carregar horários", Toast.LENGTH_SHORT).show();
+            updateEmptyView();
+        }
     }
 
     private void updateEmptyView() {

@@ -47,8 +47,8 @@ public class FaculdadeActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                // Mostrar FAB apenas na aba de Disciplinas
-                fabAdd.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
+                // Mostrar FAB apenas nas abas de Disciplinas e Horários
+                fabAdd.setVisibility(position <= 1 ? View.VISIBLE : View.GONE);
             }
         });
     }
@@ -64,6 +64,9 @@ public class FaculdadeActivity extends AppCompatActivity {
                     tab.setText(R.string.disciplinas);
                     break;
                 case 1:
+                    tab.setText(R.string.horarios);
+                    break;
+                case 2:
                     tab.setText(R.string.entregas);
                     break;
             }
