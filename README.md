@@ -1,7 +1,7 @@
-# MyApplication2 - Aplicativo de Gestão Pessoal e Acadêmica
+# Gestor Pessoal - Aplicativo de Gestão Pessoal e Acadêmica
 
 ## 📱 Sobre o Projeto
-MyApplication2 é um aplicativo Android desenvolvido para auxiliar estudantes na gestão de suas finanças pessoais e vida acadêmica. O aplicativo oferece duas funcionalidades principais:
+Gestor Pessoal é um aplicativo Android desenvolvido para auxiliar estudantes na gestão de suas finanças pessoais e vida acadêmica. O aplicativo oferece duas funcionalidades principais:
 
 ### 💰 Gestão Financeira
 - Controle de gastos e receitas
@@ -86,4 +86,4 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 Contribuições são bem-vindas! Por favor, leia as diretrizes de contribuição antes de enviar um pull request.
 
 ## 📞 Suporte
-Para suporte, envie um email para [seu-email@exemplo.com] 
+Para suporte, envie um email para netoxhoppus@gmail.com 
