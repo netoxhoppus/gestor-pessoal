@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.myapplication.fragments.ListaDisciplinasFragment;
+import com.example.myapplication.fragments.DisciplinasFragment;
 import com.example.myapplication.fragments.HorariosFragment;
 
 public class DisciplinasViewPagerAdapter extends FragmentStateAdapter {
@@ -18,7 +18,7 @@ public class DisciplinasViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new ListaDisciplinasFragment();
+                return new DisciplinasFragment();
             case 1:
                 return new HorariosFragment();
             default:

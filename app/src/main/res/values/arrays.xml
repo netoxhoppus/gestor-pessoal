@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="periodos_recorrencia">
+        <item>Mensal</item>
+        <item>Anual</item>
+    </string-array>
+    
     <string-array name="dias_semana">
         <item>Segunda-feira</item>
         <item>Terça-feira</item>
@@ -7,5 +12,6 @@
         <item>Quinta-feira</item>
         <item>Sexta-feira</item>
         <item>Sábado</item>
+        <item>Domingo</item>
     </string-array>
 </resources> 

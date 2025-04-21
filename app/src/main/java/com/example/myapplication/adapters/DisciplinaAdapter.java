@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.models.Disciplina;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,15 +51,15 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Vi
         Disciplina disciplina = disciplinas.get(position);
         holder.textViewNome.setText(disciplina.getNome());
         holder.textViewProfessor.setText(disciplina.getProfessor());
-        holder.textViewNota.setText(disciplina.getPeriodo());
+        holder.textViewNota.setText(String.format("%sº Período", disciplina.getPeriodo()));
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.cardView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onDisciplinaClick(disciplina);
             }
         });
 
-        holder.itemView.setOnLongClickListener(v -> {
+        holder.cardView.setOnLongClickListener(v -> {
             if (listener != null) {
                 listener.onDisciplinaLongClick(disciplina);
             }
@@ -72,12 +73,14 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Vi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        MaterialCardView cardView;
         TextView textViewNome;
         TextView textViewProfessor;
         TextView textViewNota;
 
         ViewHolder(View itemView) {
             super(itemView);
+            cardView = (MaterialCardView) itemView;
             textViewNome = itemView.findViewById(R.id.textViewNome);
             textViewProfessor = itemView.findViewById(R.id.textViewProfessor);
             textViewNota = itemView.findViewById(R.id.textViewNota);

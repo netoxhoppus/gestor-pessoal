@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AutoCompleteTextView;
+import android.widget.ArrayAdapter;
+import android.app.TimePickerDialog;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,12 +21,17 @@ import com.example.myapplication.R;
 import com.example.myapplication.activities.AdicionarHorarioActivity;
 import com.example.myapplication.adapters.HorarioAdapter;
 import com.example.myapplication.dao.HorarioDAO;
+import com.example.myapplication.dao.DisciplinaDAO;
 import com.example.myapplication.models.Horario;
+import com.example.myapplication.models.Disciplina;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class HorariosFragment extends Fragment implements HorarioAdapter.OnHorarioClickListener {
 
@@ -62,9 +70,108 @@ public class HorariosFragment extends Fragment implements HorarioAdapter.OnHorar
 
     private void setupFAB() {
         fabAddHorario.setOnClickListener(v -> {
-            Intent intent = new Intent(requireContext(), AdicionarHorarioActivity.class);
-            startActivity(intent);
+            showAddHorarioDialog();
         });
+    }
+
+    public void showAddHorarioDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_horario, null);
+        
+        // Initialize views
+        AutoCompleteTextView autoCompleteDiaSemana = dialogView.findViewById(R.id.autoCompleteTextViewDiaSemana);
+        TextInputEditText editTextHoraInicio = dialogView.findViewById(R.id.editTextHoraInicio);
+        TextInputEditText editTextHoraFim = dialogView.findViewById(R.id.editTextHoraFim);
+        AutoCompleteTextView autoCompleteDisciplina = dialogView.findViewById(R.id.autoCompleteTextViewDisciplina);
+        TextInputEditText editTextSala = dialogView.findViewById(R.id.editTextSala);
+
+        // Setup dias da semana dropdown
+        String[] diasSemana = getResources().getStringArray(R.array.dias_semana);
+        ArrayAdapter<String> diasAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, diasSemana);
+        autoCompleteDiaSemana.setAdapter(diasAdapter);
+
+        // Setup disciplinas dropdown
+        DisciplinaDAO disciplinaDAO = new DisciplinaDAO(requireContext());
+        List<Disciplina> disciplinas = disciplinaDAO.list(1); // TODO: Get real user ID
+        List<String> nomesDisciplinas = new ArrayList<>();
+        for (Disciplina disciplina : disciplinas) {
+            nomesDisciplinas.add(disciplina.getNome());
+        }
+        ArrayAdapter<String> disciplinasAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, nomesDisciplinas);
+        autoCompleteDisciplina.setAdapter(disciplinasAdapter);
+
+        // Setup time pickers
+        editTextHoraInicio.setOnClickListener(v -> showTimePickerDialog(editTextHoraInicio));
+        editTextHoraFim.setOnClickListener(v -> showTimePickerDialog(editTextHoraFim));
+
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.adicionar_horario)
+                .setView(dialogView)
+                .setPositiveButton(R.string.btn_salvar, (dialog, which) -> {
+                    String diaSemana = autoCompleteDiaSemana.getText().toString();
+                    String horaInicio = editTextHoraInicio.getText().toString();
+                    String horaFim = editTextHoraFim.getText().toString();
+                    String disciplinaNome = autoCompleteDisciplina.getText().toString();
+                    String sala = editTextSala.getText().toString();
+
+                    if (diaSemana.isEmpty() || horaInicio.isEmpty() || horaFim.isEmpty() || disciplinaNome.isEmpty()) {
+                        Toast.makeText(requireContext(), R.string.erro_campos_obrigatorios, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // Find disciplina ID
+                    int disciplinaId = -1;
+                    for (Disciplina disciplina : disciplinas) {
+                        if (disciplina.getNome().equals(disciplinaNome)) {
+                            disciplinaId = disciplina.getId();
+                            break;
+                        }
+                    }
+
+                    if (disciplinaId == -1) {
+                        Toast.makeText(requireContext(), R.string.erro_disciplina_nao_encontrada, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // Create and save horario
+                    Horario horario = new Horario();
+                    horario.setDiaSemana(diaSemana);
+                    horario.setHoraInicio(horaInicio);
+                    horario.setHoraFim(horaFim);
+                    horario.setObservacoes(sala);
+                    horario.setIdAula(disciplinaId);
+                    horario.setUsuarioId(1); // TODO: Get real user ID
+
+                    long id = horarioDAO.insert(horario);
+                    if (id != -1) {
+                        carregarHorarios();
+                        Toast.makeText(requireContext(), R.string.horario_adicionado, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), R.string.erro_adicionar_horario, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(R.string.btn_cancelar, null);
+
+        builder.show();
+    }
+
+    private void showTimePickerDialog(TextInputEditText editText) {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                requireContext(),
+                (view, hourOfDay, selectedMinute) -> {
+                    String time = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, selectedMinute);
+                    editText.setText(time);
+                },
+                hour,
+                minute,
+                true);
+
+        timePickerDialog.show();
     }
 
     private void carregarHorarios() {

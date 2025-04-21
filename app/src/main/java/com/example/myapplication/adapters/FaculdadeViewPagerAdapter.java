@@ -10,6 +10,9 @@ import com.example.myapplication.fragments.EntregasFragment;
 import com.example.myapplication.fragments.DisciplinasFragment;
 
 public class FaculdadeViewPagerAdapter extends FragmentStateAdapter {
+    private DisciplinasFragment disciplinasFragment;
+    private HorariosFragment horariosFragment;
+    private EntregasFragment entregasFragment;
 
     public FaculdadeViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
@@ -20,11 +23,20 @@ public class FaculdadeViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 0:
-                return new DisciplinasFragment();
+                if (disciplinasFragment == null) {
+                    disciplinasFragment = new DisciplinasFragment();
+                }
+                return disciplinasFragment;
             case 1:
-                return new HorariosFragment();
+                if (horariosFragment == null) {
+                    horariosFragment = new HorariosFragment();
+                }
+                return horariosFragment;
             case 2:
-                return new EntregasFragment();
+                if (entregasFragment == null) {
+                    entregasFragment = new EntregasFragment();
+                }
+                return entregasFragment;
             default:
                 return new DisciplinasFragment();
         }
@@ -33,5 +45,17 @@ public class FaculdadeViewPagerAdapter extends FragmentStateAdapter {
     @Override
     public int getItemCount() {
         return 3; // Disciplinas, Horários e Entregas
+    }
+
+    public DisciplinasFragment getDisciplinasFragment() {
+        return disciplinasFragment;
+    }
+
+    public HorariosFragment getHorariosFragment() {
+        return horariosFragment;
+    }
+
+    public EntregasFragment getEntregasFragment() {
+        return entregasFragment;
     }
 } 

@@ -51,6 +51,22 @@ public class FaculdadeActivity extends AppCompatActivity {
                 fabAdd.setVisibility(position <= 1 ? View.VISIBLE : View.GONE);
             }
         });
+
+        // Configurar click listener do FAB
+        fabAdd.setOnClickListener(view -> {
+            int currentPosition = viewPager.getCurrentItem();
+            FaculdadeViewPagerAdapter adapter = (FaculdadeViewPagerAdapter) viewPager.getAdapter();
+            if (adapter != null) {
+                switch (currentPosition) {
+                    case 0: // Disciplinas
+                        adapter.getDisciplinasFragment().showAddDisciplinaDialog();
+                        break;
+                    case 1: // Horários
+                        adapter.getHorariosFragment().showAddHorarioDialog();
+                        break;
+                }
+            }
+        });
     }
 
     private void setupViewPager() {

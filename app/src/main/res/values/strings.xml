@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Gestor pessoal</string>
+    <string name="app_name">Gestor Pessoal</string>
     <string name="greeting_message">Olá, %1$s!</string>
+    
+    <!-- Common actions -->
+    <string name="btn_salvar">Salvar</string>
+    <string name="btn_cancelar">Cancelar</string>
+    
+    <!-- Common validation messages -->
+    <string name="erro_campos_vazios">Por favor, preencha todos os campos</string>
+    <string name="erro_campos_obrigatorios">Por favor, preencha todos os campos obrigatórios</string>
+    <string name="campo_obrigatorio">Campo obrigatório</string>
+    
+    <!-- Expense management -->
     <string name="title_activity_gasto">Gastos</string>
     <string name="title_activity_categoria">Categorias</string>
     <string name="title_activity_adicionar_categoria">Nova Categoria</string>
@@ -15,7 +26,6 @@
     <string name="hint_valor">Valor</string>
     <string name="hint_data">Data</string>
     <string name="hint_categoria">Categoria</string>
-    <string name="btn_salvar">Salvar</string>
     <string name="title_adicionar_editar_gasto">Adicionar/Editar Gasto</string>
     <string name="gastos_futuros">Gastos Futuros</string>
     <string name="adicionar_gasto_futuro">Adicionar Gasto Futuro</string>
@@ -31,12 +41,10 @@
     <string name="gasto_recorrente">Gasto Recorrente</string>
     <string name="erro_carregar_gasto_futuro">Erro ao carregar gasto futuro</string>
     <string name="gasto_futuro_nao_encontrado">Gasto futuro não encontrado</string>
-    <string-array name="periodos_recorrencia">
-        <item>Mensal</item>
-        <item>Anual</item>
-    </string-array>
+    <string name="excluir_gasto_futuro">Excluir gasto futuro</string>
+    <string name="confirmar_exclusao_gasto_futuro">Deseja excluir este gasto futuro?</string>
     
-    <!-- Strings para gestão acadêmica -->
+    <!-- Academic management -->
     <string name="faculdade">Faculdade</string>
     <string name="disciplinas">Disciplinas</string>
     <string name="horarios">Horários</string>
@@ -47,22 +55,49 @@
     <string name="calendario_academico">Calendário Acadêmico</string>
     <string name="professores">Professores</string>
     <string name="materiais">Materiais de Estudo</string>
+    
+    <!-- Disciplines -->
     <string name="nenhuma_disciplina">Nenhuma disciplina cadastrada</string>
     <string name="adicionar_disciplina">Adicionar Disciplina</string>
     <string name="editar_disciplina">Editar Disciplina</string>
     <string name="excluir_disciplina">Excluir Disciplina</string>
     <string name="hint_nome_disciplina">Nome da Disciplina</string>
+    <string name="nome_disciplina">Nome da Disciplina</string>
     <string name="hint_professor">Professor</string>
+    <string name="professor">Professor</string>
     <string name="hint_periodo">Período</string>
-    <string name="hint_sala">Sala</string>
-    <string name="hint_horario">Horário</string>
-    <string name="hint_media">Média</string>
+    <string name="periodo">Período</string>
+    <string name="disciplina">Disciplina</string>
     <string name="disciplina_salva">Disciplina salva com sucesso</string>
+    <string name="disciplina_adicionada">Disciplina adicionada com sucesso</string>
+    <string name="disciplina_excluida">Disciplina excluída com sucesso</string>
     <string name="erro_salvar_disciplina">Erro ao salvar disciplina</string>
+    <string name="erro_adicionar_disciplina">Erro ao adicionar disciplina</string>
+    <string name="erro_excluir_disciplina">Erro ao excluir disciplina</string>
+    <string name="erro_disciplina_nao_encontrada">Disciplina não encontrada</string>
+    <string name="erro_periodo_invalido">Por favor, insira um período válido</string>
     <string name="confirmar_exclusao_disciplina">Deseja excluir esta disciplina?</string>
     <string name="media_format">Média: %.2f</string>
     
-    <!-- Strings para notas -->
+    <!-- Schedule -->
+    <string name="nenhum_horario">Nenhum horário cadastrado</string>
+    <string name="adicionar_horario">Adicionar Horário</string>
+    <string name="editar_horario">Editar horário</string>
+    <string name="excluir_horario">Excluir horário</string>
+    <string name="confirmar_exclusao_horario">Deseja excluir este horário?</string>
+    <string name="horario_salvo">Horário salvo com sucesso</string>
+    <string name="horario_adicionado">Horário adicionado com sucesso</string>
+    <string name="erro_salvar_horario">Erro ao salvar horário</string>
+    <string name="erro_adicionar_horario">Erro ao adicionar horário</string>
+    <string name="hint_dia_semana">Dia da Semana</string>
+    <string name="hint_hora_inicio">Hora de Início</string>
+    <string name="hint_hora_fim">Hora de Término</string>
+    <string name="hint_sala">Sala</string>
+    <string name="sala">Sala</string>
+    <string name="hint_horario">Horário</string>
+    <string name="hint_media">Média</string>
+    
+    <!-- Grades -->
     <string name="nenhuma_nota">Nenhuma nota cadastrada</string>
     <string name="adicionar_nota">Adicionar nota</string>
     <string name="editar_nota">Editar nota</string>
@@ -70,20 +105,4 @@
     <string name="nota_salva">Nota salva com sucesso</string>
     <string name="erro_salvar_nota">Erro ao salvar nota</string>
     <string name="confirmar_exclusao_nota">Deseja excluir esta nota?</string>
-    <string name="campo_obrigatorio">Campo obrigatório</string>
-    <string name="excluir_gasto_futuro">Excluir gasto futuro</string>
-    <string name="confirmar_exclusao_gasto_futuro">Deseja excluir este gasto futuro?</string>
-    <string name="nenhum_horario">Nenhum horário cadastrado</string>
-    <string name="adicionar_horario">Adicionar horário</string>
-    <string name="editar_horario">Editar horário</string>
-    <string name="excluir_horario">Excluir horário</string>
-    <string name="confirmar_exclusao_horario">Deseja excluir este horário?</string>
-    <string name="horario_salvo">Horário salvo com sucesso</string>
-    <string name="erro_salvar_horario">Erro ao salvar horário</string>
-    <string name="hint_dia_semana">Dia da semana</string>
-    <string name="hint_hora_inicio">Hora de início</string>
-    <string name="hint_hora_fim">Hora de fim</string>
-    <string name="disciplina">Disciplina</string>
-    <string name="sala">Sala</string>
-    <string name="erro_campos_obrigatorios">Preencha todos os campos obrigatórios</string>
 </resources>
