@@ -59,14 +59,22 @@ public class HorarioDAO extends BaseDAO {
         try {
             cursor = getReadableDatabase().rawQuery(
                     "SELECT h.*, COALESCE(d.nome, 'Disciplina não definida') as disciplina_nome, " +
-                    "CASE h.dia_semana " +
-                    "WHEN 'Segunda' THEN 1 " +
-                    "WHEN 'Terça' THEN 2 " +
-                    "WHEN 'Quarta' THEN 3 " +
-                    "WHEN 'Quinta' THEN 4 " +
-                    "WHEN 'Sexta' THEN 5 " +
-                    "WHEN 'Sábado' THEN 6 " +
-                    "WHEN 'Domingo' THEN 7 " +
+                    "CASE LOWER(REPLACE(REPLACE(h.dia_semana, 'ç', 'c'), 'á', 'a')) " +
+                    "WHEN 'segunda' THEN 1 " +
+                    "WHEN 'segunda-feira' THEN 1 " +
+                    "WHEN 'terca' THEN 2 " +
+                    "WHEN 'terça' THEN 2 " +
+                    "WHEN 'terca-feira' THEN 2 " +
+                    "WHEN 'terça-feira' THEN 2 " +
+                    "WHEN 'quarta' THEN 3 " +
+                    "WHEN 'quarta-feira' THEN 3 " +
+                    "WHEN 'quinta' THEN 4 " +
+                    "WHEN 'quinta-feira' THEN 4 " +
+                    "WHEN 'sexta' THEN 5 " +
+                    "WHEN 'sexta-feira' THEN 5 " +
+                    "WHEN 'sabado' THEN 6 " +
+                    "WHEN 'sábado' THEN 6 " +
+                    "WHEN 'domingo' THEN 7 " +
                     "ELSE 8 END as ordem_dia " +
                     "FROM horarios h " +
                     "LEFT JOIN disciplinas d ON h.id_aula = d.id " +
