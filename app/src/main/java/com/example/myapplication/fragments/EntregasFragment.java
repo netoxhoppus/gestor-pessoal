@@ -228,10 +228,11 @@ public class EntregasFragment extends Fragment implements EntregaAdapter.OnEntre
     public void onEntregaChecked(Entrega entrega, boolean isChecked) {
         entrega.setConcluida(isChecked);
         if (entregaDAO.update(entrega)) {
+            carregarEntregas();
             Toast.makeText(requireContext(), R.string.entrega_atualizada, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(requireContext(), R.string.erro_atualizar_entrega, Toast.LENGTH_SHORT).show();
-            entrega.setConcluida(!isChecked); // Reverte a mudança em caso de erro
+            entrega.setConcluida(!isChecked);
             adapter.notifyItemChanged(entregas.indexOf(entrega));
         }
     }

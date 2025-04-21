@@ -65,7 +65,8 @@ public class EntregaDAO extends BaseDAO {
                           "FROM entregas e " +
                           "LEFT JOIN disciplinas d ON e.disciplina_id = d.id " +
                           "WHERE e.usuario_id = ? " +
-                          "ORDER BY e.data_entrega ASC";
+                          "ORDER BY CASE e.status WHEN 'Pendente' THEN 0 ELSE 1 END, " +
+                          "e.data_entrega ASC";
 
             cursor = db.rawQuery(query, new String[]{String.valueOf(usuarioId)});
 
