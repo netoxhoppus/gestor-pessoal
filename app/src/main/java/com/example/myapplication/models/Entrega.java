@@ -9,23 +9,16 @@ public class Entrega implements Serializable {
     private String descricao;
     private Date dataEntrega;
     private int disciplinaId;
+    private String disciplinaNome;
     private int usuarioId;
     private String status;
-    private double nota;
-    private String disciplinaNome;
+    private boolean concluida;
+    private float nota;
 
     public Entrega() {
-    }
-
-    public Entrega(int id, String titulo, String descricao, Date dataEntrega, int disciplinaId, int usuarioId, String status, double nota) {
-        this.id = id;
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.dataEntrega = dataEntrega;
-        this.disciplinaId = disciplinaId;
-        this.usuarioId = usuarioId;
-        this.status = status;
-        this.nota = nota;
+        this.status = "Pendente";
+        this.concluida = false;
+        this.nota = 0;
     }
 
     public int getId() {
@@ -84,7 +77,7 @@ public class Entrega implements Serializable {
     }
 
     public String getDisciplinaNome() {
-        return disciplinaNome != null ? disciplinaNome : "";
+        return disciplinaNome;
     }
 
     public void setDisciplinaNome(String disciplinaNome) {
@@ -107,11 +100,20 @@ public class Entrega implements Serializable {
         this.status = status;
     }
 
-    public double getNota() {
+    public boolean isConcluida() {
+        return concluida;
+    }
+
+    public void setConcluida(boolean concluida) {
+        this.concluida = concluida;
+        this.status = concluida ? "Concluída" : "Pendente";
+    }
+
+    public float getNota() {
         return nota;
     }
 
-    public void setNota(double nota) {
+    public void setNota(float nota) {
         this.nota = nota;
     }
 

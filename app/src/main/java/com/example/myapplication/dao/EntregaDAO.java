@@ -38,64 +38,52 @@ public class EntregaDAO extends BaseDAO {
         values.put("titulo", entrega.getTitulo());
         values.put("descricao", entrega.getDescricao());
         values.put("data_entrega", entrega.getDataEntrega().getTime());
+        values.put("disciplina_id", entrega.getDisciplinaId());
         values.put("status", entrega.getStatus());
         values.put("nota", entrega.getNota());
 
-        return getWritableDatabase().update("entregas", values,
-                "id = ? AND usuario_id = ?",
-                new String[]{String.valueOf(entrega.getId()), String.valueOf(entrega.getUsuarioId())}) > 0;
+        String whereClause = "id = ? AND usuario_id = ?";
+        String[] whereArgs = {String.valueOf(entrega.getId()), String.valueOf(entrega.getUsuarioId())};
+
+        return getWritableDatabase().update("entregas", values, whereClause, whereArgs) > 0;
     }
 
     public boolean delete(int id, int usuarioId) {
-        return getWritableDatabase().delete("entregas",
-                "id = ? AND usuario_id = ?",
-                new String[]{String.valueOf(id), String.valueOf(usuarioId)}) > 0;
+        String whereClause = "id = ? AND usuario_id = ?";
+        String[] whereArgs = {String.valueOf(id), String.valueOf(usuarioId)};
+
+        return getWritableDatabase().delete("entregas", whereClause, whereArgs) > 0;
     }
 
     public List<Entrega> list(long usuarioId) {
         List<Entrega> entregas = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = null;
 
         try {
-            cursor = getReadableDatabase().rawQuery(
-                    "SELECT e.*, COALESCE(d.nome, 'Disciplina removida') as disciplina_nome " +
-                    "FROM entregas e " +
-                    "LEFT JOIN disciplinas d ON e.disciplina_id = d.id " +
-                    "WHERE e.usuario_id = ? " +
-                    "ORDER BY e.data_entrega ASC",
-                    new String[]{String.valueOf(usuarioId)});
+            String query = "SELECT e.*, d.nome as disciplina_nome " +
+                          "FROM entregas e " +
+                          "LEFT JOIN disciplinas d ON e.disciplina_id = d.id " +
+                          "WHERE e.usuario_id = ? " +
+                          "ORDER BY e.data_entrega ASC";
+
+            cursor = db.rawQuery(query, new String[]{String.valueOf(usuarioId)});
 
             while (cursor.moveToNext()) {
-                try {
-                    Entrega entrega = new Entrega();
-                    entrega.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
-                    entrega.setTitulo(cursor.getString(cursor.getColumnIndexOrThrow("titulo")));
-                    entrega.setDescricao(cursor.getString(cursor.getColumnIndexOrThrow("descricao")));
-                    long timestamp = cursor.getLong(cursor.getColumnIndexOrThrow("data_entrega"));
-                    entrega.setDataEntrega(new Date(timestamp));
-                    entrega.setDisciplinaId(cursor.getInt(cursor.getColumnIndexOrThrow("disciplina_id")));
-                    entrega.setUsuarioId(cursor.getInt(cursor.getColumnIndexOrThrow("usuario_id")));
-                    entrega.setStatus(cursor.getString(cursor.getColumnIndexOrThrow("status")));
-                    
-                    // Tratamento para possíveis valores nulos
-                    try {
-                        entrega.setNota(cursor.getDouble(cursor.getColumnIndexOrThrow("nota")));
-                    } catch (Exception e) {
-                        entrega.setNota(0.0);
-                    }
-                    
-                    String disciplinaNome = cursor.getString(cursor.getColumnIndexOrThrow("disciplina_nome"));
-                    entrega.setDisciplinaNome(disciplinaNome != null ? disciplinaNome : "Disciplina removida");
-                    
-                    entregas.add(entrega);
-                } catch (Exception e) {
-                    Log.e(TAG, "Erro ao processar entrega do cursor", e);
-                    // Continua para a próxima entrega em caso de erro
-                    continue;
-                }
+                Entrega entrega = new Entrega();
+                entrega.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+                entrega.setTitulo(cursor.getString(cursor.getColumnIndexOrThrow("titulo")));
+                entrega.setDescricao(cursor.getString(cursor.getColumnIndexOrThrow("descricao")));
+                entrega.setDataEntrega(new Date(cursor.getLong(cursor.getColumnIndexOrThrow("data_entrega"))));
+                entrega.setDisciplinaId(cursor.getInt(cursor.getColumnIndexOrThrow("disciplina_id")));
+                entrega.setDisciplinaNome(cursor.getString(cursor.getColumnIndexOrThrow("disciplina_nome")));
+                entrega.setUsuarioId(cursor.getInt(cursor.getColumnIndexOrThrow("usuario_id")));
+                entrega.setStatus(cursor.getString(cursor.getColumnIndexOrThrow("status")));
+                entrega.setNota(cursor.getFloat(cursor.getColumnIndexOrThrow("nota")));
+                entrega.setConcluida(entrega.getStatus().equals("Concluída"));
+
+                entregas.add(entrega);
             }
-        } catch (Exception e) {
-            Log.e(TAG, "Erro ao listar entregas", e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -132,9 +120,9 @@ public class EntregaDAO extends BaseDAO {
                     
                     // Tratamento para possíveis valores nulos
                     try {
-                        entrega.setNota(cursor.getDouble(cursor.getColumnIndexOrThrow("nota")));
+                        entrega.setNota(cursor.getFloat(cursor.getColumnIndexOrThrow("nota")));
                     } catch (Exception e) {
-                        entrega.setNota(0.0);
+                        entrega.setNota(0.0f);
                     }
                     
                     String disciplinaNome = cursor.getString(cursor.getColumnIndexOrThrow("disciplina_nome"));
@@ -160,27 +148,29 @@ public class EntregaDAO extends BaseDAO {
 
     public Entrega get(int id) {
         Entrega entrega = null;
+        SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = null;
 
         try {
-            cursor = getReadableDatabase().rawQuery(
-                    "SELECT e.*, d.nome as disciplina_nome FROM entregas e " +
-                    "LEFT JOIN disciplinas d ON e.disciplina_id = d.id " +
-                    "WHERE e.id = ?",
-                    new String[]{String.valueOf(id)});
+            String query = "SELECT e.*, d.nome as disciplina_nome " +
+                          "FROM entregas e " +
+                          "LEFT JOIN disciplinas d ON e.disciplina_id = d.id " +
+                          "WHERE e.id = ?";
+
+            cursor = db.rawQuery(query, new String[]{String.valueOf(id)});
 
             if (cursor.moveToFirst()) {
                 entrega = new Entrega();
                 entrega.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
                 entrega.setTitulo(cursor.getString(cursor.getColumnIndexOrThrow("titulo")));
                 entrega.setDescricao(cursor.getString(cursor.getColumnIndexOrThrow("descricao")));
-                long timestamp = cursor.getLong(cursor.getColumnIndexOrThrow("data_entrega"));
-                entrega.setDataEntrega(new Date(timestamp));
+                entrega.setDataEntrega(new Date(cursor.getLong(cursor.getColumnIndexOrThrow("data_entrega"))));
                 entrega.setDisciplinaId(cursor.getInt(cursor.getColumnIndexOrThrow("disciplina_id")));
+                entrega.setDisciplinaNome(cursor.getString(cursor.getColumnIndexOrThrow("disciplina_nome")));
                 entrega.setUsuarioId(cursor.getInt(cursor.getColumnIndexOrThrow("usuario_id")));
                 entrega.setStatus(cursor.getString(cursor.getColumnIndexOrThrow("status")));
-                entrega.setNota(cursor.getDouble(cursor.getColumnIndexOrThrow("nota")));
-                entrega.setDisciplinaNome(cursor.getString(cursor.getColumnIndexOrThrow("disciplina_nome")));
+                entrega.setNota(cursor.getFloat(cursor.getColumnIndexOrThrow("nota")));
+                entrega.setConcluida(entrega.getStatus().equals("Concluída"));
             }
         } finally {
             if (cursor != null) {

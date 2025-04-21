@@ -105,4 +105,22 @@
     <string name="nota_salva">Nota salva com sucesso</string>
     <string name="erro_salvar_nota">Erro ao salvar nota</string>
     <string name="confirmar_exclusao_nota">Deseja excluir esta nota?</string>
+    
+    <!-- Entregas -->
+    <string name="nenhuma_entrega">Nenhuma entrega pendente</string>
+    <string name="adicionar_entrega">Adicionar Entrega</string>
+    <string name="titulo_entrega">Título da Entrega</string>
+    <string name="descricao">Descrição</string>
+    <string name="data_entrega">Data de Entrega</string>
+    <string name="entrega_adicionada">Entrega adicionada com sucesso</string>
+    <string name="erro_adicionar_entrega">Erro ao adicionar entrega</string>
+    <string name="erro_campos_obrigatorios_entrega">Por favor, preencha todos os campos obrigatórios</string>
+    <string name="excluir_entrega">Excluir Entrega</string>
+    <string name="confirmar_exclusao_entrega">Deseja realmente excluir esta entrega?</string>
+    <string name="entrega_excluida">Entrega excluída com sucesso</string>
+    <string name="erro_excluir_entrega">Erro ao excluir entrega</string>
+    <string name="marcar_como_concluida">Marcar como concluída</string>
+    <string name="marcar_como_pendente">Marcar como pendente</string>
+    <string name="entrega_atualizada">Status da entrega atualizado</string>
+    <string name="erro_atualizar_entrega">Erro ao atualizar status da entrega</string>
 </resources>
