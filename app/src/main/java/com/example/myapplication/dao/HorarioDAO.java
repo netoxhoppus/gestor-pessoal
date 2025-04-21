@@ -58,11 +58,20 @@ public class HorarioDAO extends BaseDAO {
 
         try {
             cursor = getReadableDatabase().rawQuery(
-                    "SELECT h.*, COALESCE(d.nome, 'Disciplina não definida') as disciplina_nome " +
+                    "SELECT h.*, COALESCE(d.nome, 'Disciplina não definida') as disciplina_nome, " +
+                    "CASE h.dia_semana " +
+                    "WHEN 'Segunda' THEN 1 " +
+                    "WHEN 'Terça' THEN 2 " +
+                    "WHEN 'Quarta' THEN 3 " +
+                    "WHEN 'Quinta' THEN 4 " +
+                    "WHEN 'Sexta' THEN 5 " +
+                    "WHEN 'Sábado' THEN 6 " +
+                    "WHEN 'Domingo' THEN 7 " +
+                    "ELSE 8 END as ordem_dia " +
                     "FROM horarios h " +
                     "LEFT JOIN disciplinas d ON h.id_aula = d.id " +
                     "WHERE h.usuario_id = ? " +
-                    "ORDER BY h.dia_semana ASC, h.hora_inicio ASC",
+                    "ORDER BY ordem_dia ASC, h.hora_inicio ASC",
                     new String[]{String.valueOf(usuarioId)});
 
             while (cursor.moveToNext()) {
